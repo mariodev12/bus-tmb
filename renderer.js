@@ -1,10 +1,11 @@
 const config = {
-    'appId': 'appId',
-    'apiKey': 'apiKey'
+    'appId': '',
+    'apiKey': ''
 }
 
 window.onload = () => {
     get();
+    paradas();
 }
 
 const get = () => {
@@ -20,6 +21,23 @@ const get = () => {
                     document.querySelector('.time').innerHTML = "No information"
                 }
             }, 3000);
+        })
+}
+
+const paradas = () => {
+    fetch(`https://api.tmb.cat/v1/transit/linies/bus/212/trajectes/parades?app_id=${config.appId}&app_key=${config.apiKey}&cql_filter=(TIPUS_PAQUET+IN+(1)+AND+ID_SENTIT+IN+(1))&sortBy=ORDRE`)
+        .then(data => data.json())
+        .then((paradas) => {
+            const container = document.querySelector('.container');
+            const selector = document.createElement('select');
+            container.appendChild(selector);
+            return paradas.features.map((item) => {
+                const options = document.createElement('option');
+                const textNode = document.createTextNode(item.properties.NOM_PARADA)
+                options.appendChild(textNode);
+                selector.appendChild(options);
+                console.log(item.properties.CODI_PARADA, item.properties.CODI_LINIA, item.properties.NOM_LINIA)
+            })
         })
 }
 
