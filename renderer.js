@@ -8,8 +8,10 @@ window.onload = () => {
     //paradas();
 }
 
-const get = (id) => {
-    fetch(`https://api.tmb.cat/v1/ibus/lines/6/stops/${id}?app_id=${config.appId}&app_key=${config.apiKey}`)
+const get = (idLinia, idParada) => {
+    console.log(idLinia,idParada)
+    
+    fetch(`https://api.tmb.cat/v1/ibus/lines/${idLinia}/stops/${idParada}?app_id=${config.appId}&app_key=${config.apiKey}`)
         .then(data => data.json())
         .then((bus) => {
             const arrayLength = bus.data.ibus.length;
@@ -26,7 +28,10 @@ const get = (id) => {
 
 const changeParadasSelected = (id) => {
     const value = id.value
-    get(value)
+    const values = value.split(' - ');
+    console.log(values[0])
+    console.log(values[1])
+    get(values[0], values[1])
     console.log(value)
 }
 
@@ -37,12 +42,15 @@ const paradas = (id) => {
             const container = document.querySelector('.paradas');
             container.innerHTML = "";
             const selector = document.createElement('select');
+            const options = document.createElement('option');
+            options.text = "Selecciona una parada"
             container.appendChild(selector);
+            selector.appendChild(options);
             selector.onchange = function(){ changeParadasSelected(this);};
             return paradas.features.map((item) => {
                 const options = document.createElement('option');
                 const textNode = document.createTextNode(item.properties.NOM_PARADA)
-                options.value = item.properties.CODI_PARADA
+                options.value = `${item.properties.CODI_LINIA} - ${item.properties.CODI_PARADA}`
                 options.appendChild(textNode);
                 selector.appendChild(options);
                 console.log(item.properties.CODI_PARADA, item.properties.CODI_LINIA, item.properties.NOM_LINIA)
@@ -62,18 +70,17 @@ const buses = () => {
             const container = document.querySelector('.bus');
             container.innerHTML = ""
             const selector = document.createElement('select');
+            const options = document.createElement('option');
+            options.text = "Selecciona una linea de autobus"
             container.appendChild(selector);
+            selector.appendChild(options);
             selector.onchange = function(){ changeBusesSelected(this);};
             return bus.features.map((item) => {
                 const options = document.createElement('option');
                 const textNode = document.createTextNode(item.properties.NOM_LINIA)
-                options.value = item.properties.CODI_LINIA
+                options.value = item.properties.CODI_LINIA 
                 options.appendChild(textNode);
                 selector.appendChild(options);
             })
         })
 }
-
-setInterval(() => {
-    get()
-}, 30000);
