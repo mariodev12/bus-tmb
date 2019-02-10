@@ -1,7 +1,4 @@
-const config = {
-    'appId': '',
-    'apiKey': ''
-}
+const config = require('./config.js')
 
 window.onload = () => {
     buses();
