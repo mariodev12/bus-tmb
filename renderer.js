@@ -1,4 +1,4 @@
-const config = require('./config.js')
+const config = require('./config/config.js')
 
 window.onload = () => {
     buses();
@@ -17,7 +17,7 @@ const get = (idLinia, idParada) => {
                 if (arrayLength > 0) {
                     document.querySelector('.time').innerHTML = bus.data.ibus[0]["text-ca"]
                 } else {
-                    document.querySelector('.time').innerHTML = "No information"
+                    document.querySelector('.time').innerHTML = "Sin información"
                 }
             }, 3000);
         })
