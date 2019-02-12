@@ -33,7 +33,6 @@ const changeParadasSelected = (id) => {
 }
 
 const paradas = (id, direction=1) => {
-    console.log('test')
     fetch(`https://api.tmb.cat/v1/transit/linies/bus/${id}/trajectes/parades?app_id=${config.appId}&app_key=${config.apiKey}&cql_filter=(TIPUS_PAQUET+IN+(1)+AND+ID_SENTIT+IN+(${direction}))&sortBy=ORDRE`)
         .then(data => data.json())
         .then((paradas) => {
@@ -58,16 +57,7 @@ const paradas = (id, direction=1) => {
 
 const changeBusesSelected = (id) => {
     const value = id.value
-    paradas(value)
-}
-
-const changeDirectionUp = (id) => {
-    const value = id.value;
     paradas(value, 1)
-}
-
-const changeDirectionDown = (id) => {
-    const value = id.value;
     paradas(value, 2)
 }
 
@@ -83,7 +73,6 @@ const buses = () => {
             container.appendChild(selector);
             selector.appendChild(options);
             selector.onchange = function(){ changeBusesSelected(this);};
-            
             return bus.features.map((item) => {
                 const options = document.createElement('option');
                 const textNode = document.createTextNode(item.properties.NOM_LINIA)
