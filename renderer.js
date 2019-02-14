@@ -36,21 +36,25 @@ const paradas = (id, direction=1, classDiv) => {
     fetch(`https://api.tmb.cat/v1/transit/linies/bus/${id}/trajectes/parades?app_id=${config.appId}&app_key=${config.apiKey}&cql_filter=(TIPUS_PAQUET+IN+(1)+AND+ID_SENTIT+IN+(${direction}))&sortBy=ORDRE`)
         .then(data => data.json())
         .then((paradas) => {
+            console.log(`De ${paradas.features[0].properties.DESTI_TRAJECTE} a ${paradas.features[0].properties.ORIGEN_TRAJECTE}`)
             const container = document.querySelector(classDiv);
             container.innerHTML = "";
+            const textDirection = document.createElement('h4')
+            textDirection.innerHTML = `De ${paradas.features[0].properties.DESTI_TRAJECTE} a ${paradas.features[0].properties.ORIGEN_TRAJECTE}`
+            textDirection.setAttribute('class', "text-parada");
+            container.appendChild(textDirection);
             const selector = document.createElement('select');
             const options = document.createElement('option');
             options.text = "Selecciona una parada"
             container.appendChild(selector);
             selector.appendChild(options);
             selector.onchange = function(){ changeParadasSelected(this);};
-            return paradas.features.map((item) => {
+            return paradas.features.slice(0).reverse().map((item) => {
                 const options = document.createElement('option');
                 const textNode = document.createTextNode(item.properties.NOM_PARADA)
                 options.value = `${item.properties.CODI_LINIA} - ${item.properties.CODI_PARADA}`
                 options.appendChild(textNode);
                 selector.appendChild(options);
-                console.log(item.properties.CODI_PARADA, item.properties.CODI_LINIA, item.properties.NOM_LINIA)
             })
         })
 }

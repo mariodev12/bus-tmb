@@ -59,7 +59,8 @@ select {
 }
 .text-parada {
     font-size: 20px;
-    font-family: 'San Francisco Regular'
+    font-family: 'San Francisco Regular';
+    margin-bottom: 5px;
 }
 .text-default {
     font-size: 25px;
