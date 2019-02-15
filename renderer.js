@@ -28,7 +28,9 @@ const changeParadasSelected = (id) => {
     const values = value.split(' - ');
     console.log(values[0])
     console.log(values[1])
-    get(values[0], values[1])
+    setInterval(() => {
+        get(values[0], values[1])
+    }, 10000);
     console.log(value)
 }
 
