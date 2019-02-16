@@ -12,33 +12,25 @@ const get = (idLinia, idParada) => {
         .then(data => data.json())
         .then((bus) => {
             const arrayLength = bus.data.ibus.length;
-            console.log(bus)
-            setTimeout(() => {
-                if (arrayLength > 0) {
-                    document.querySelector('.time').innerHTML = bus.data.ibus[0]["text-ca"]
-                } else {
-                    document.querySelector('.time').innerHTML = "Sin información"
-                }
-            }, 3000);
+
+            if (arrayLength > 0) {
+                document.querySelector('.time').innerHTML = bus.data.ibus[0]["text-ca"]
+            } else {
+                document.querySelector('.time').innerHTML = "Sin información"
+            }
         })
 }
 
 const changeParadasSelected = (id) => {
     const value = id.value
     const values = value.split(' - ');
-    console.log(values[0])
-    console.log(values[1])
-    setInterval(() => {
-        get(values[0], values[1])
-    }, 10000);
-    console.log(value)
+    get(values[0], values[1])
 }
 
 const paradas = (id, direction=1, classDiv) => {
     fetch(`https://api.tmb.cat/v1/transit/linies/bus/${id}/trajectes/parades?app_id=${config.appId}&app_key=${config.apiKey}&cql_filter=(TIPUS_PAQUET+IN+(1)+AND+ID_SENTIT+IN+(${direction}))&sortBy=ORDRE`)
         .then(data => data.json())
         .then((paradas) => {
-            console.log(`De ${paradas.features[0].properties.DESTI_TRAJECTE} a ${paradas.features[0].properties.ORIGEN_TRAJECTE}`)
             const container = document.querySelector(classDiv);
             container.innerHTML = "";
             const textDirection = document.createElement('h4')
